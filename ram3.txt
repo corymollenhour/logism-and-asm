@@ -1,0 +1,39 @@
+  ; OLA9 RSC Add numbers 1 -> n
+  ; CORY MOLLENHOUR
+  ;
+  
+; Performs following operations to hex numbers:
+  ;  Adds numbers from 1 to n, where n is user specified in "nvar"
+  
+  JMP start
+  
+  ; Variables
+
+  var1: 0001   ; Var 1 will count up (1,2,3,4,5...)
+  var2: 0000   ; Var 2 is the result after each addition (0,1,3,6,10...)
+  var3: 0001   ; Var 3 remains 1 to decrement nvar
+  nvar: 5		; nvar is the user specified number of times to add to result
+
+  start:       ; the label 'start'. The jump statement earlier jumps here
+     JMP loop
+     OUT       ; Send Accumulator contents to Output Register
+
+  loop:
+	  JMPZ exit ; If Z = 1 (ACC = 0) then jump to exit
+     LDAC var2 ; Load the second variable into Accumulator (initially 0) 
+     MOVAC     ; Move the contents of Accumulator to R	
+     LDAC var1 ; Load the first variable into Accumulator (initially 1)	
+     ADD       ; Add Accumulator and R, move result into Accumulator	
+     OUTR		; Output the current ACC value	
+     STAC var2	; Update var2 to be 1 + var2	
+	  LDAC var1 ; Load the first variable into Accumulator (initially 1)
+     INAC		; Increment current ACC value (var1)	
+     STAC var1	; Update var1 with incremented value	
+     LDAC var3 ; Load the counter (always 1)
+	  MOVAC		; Move 
+     LDAC nvar ; Use 1 to decrement -1
+     SUB			; Decrement nvar by 1
+	  STAC nvar ; Update nvar to decremented number (leave in ACC!)
+     JMP loop
+exit:
+	HALT
